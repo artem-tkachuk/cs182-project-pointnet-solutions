@@ -1,6 +1,6 @@
 from __future__ import print_function
-from show3d_balls import showpoints
 import argparse
+from show3d_balls import showpoints
 import numpy as np
 import torch
 import torch.nn.parallel
@@ -11,7 +11,7 @@ from pointnet.model import PointNetDenseCls
 import matplotlib.pyplot as plt
 
 
-#showpoints(np.random.randn(2500,3), c1 = np.random.uniform(0,1,size = (2500)))
+showpoints(np.random.randn(2500,3), c1 = np.random.uniform(0,1,size = (2500)))
 
 parser = argparse.ArgumentParser()
 
