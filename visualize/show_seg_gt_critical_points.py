@@ -1,11 +1,12 @@
-from dataset.ShapeNetDataset import ShapeNetDataset
-from pointnet.models import PointNetDenseCls
-from utils.options import Options
 import torch
 from torch.autograd import Variable
-
-from visualize.critical_points import compute_principal_curvature, visualize_critical_points
-from visualize.show_points import show_points
+import matplotlib.pyplot as plt
+import numpy as np
+from cs182_project_pointnet.dataset.ShapeNetDataset import ShapeNetDataset
+from cs182_project_pointnet.pointnet.models import PointNetDenseCls
+from cs182_project_pointnet.utils.options import Options
+from cs182_project_pointnet.visualize.critical_points import compute_principal_curvature, visualize_critical_points
+from cs182_project_pointnet.visualize.show_points import show_points
 
 
 def visualize_seg_and_critical_points(
