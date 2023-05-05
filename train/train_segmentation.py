@@ -5,6 +5,7 @@ import torch.optim as optim
 import torch.utils.data
 import torch.nn.functional as F
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 import numpy as np
 from cs182_project_pointnet.utils.options import Options
 from cs182_project_pointnet.dataset.ShapeNetDataset import ShapeNetDataset
@@ -32,7 +33,7 @@ def train_segmentation(
         feature_transform=feature_transform
     )
 
-    print(opt)
+    # print(opt)
 
     opt.manualSeed = random.randint(1, 10000)  # fix seed
     print("Random Seed: ", opt.manualSeed)
@@ -82,6 +83,11 @@ def train_segmentation(
 
     num_batch = len(dataset) / opt.batchSize
 
+    train_accuracies = []
+    train_losses = []
+    test_accuracies = []
+    test_losses = []
+
     for epoch in range(opt.nepoch):
         scheduler.step()
         for i, data in enumerate(dataloader, 0):
@@ -104,6 +110,10 @@ def train_segmentation(
             print('[%d: %d/%d] train loss: %f accuracy: %f' % (
                 epoch, i, num_batch, loss.item(), correct.item() / float(opt.batchSize * 2500)))
 
+            # For train
+            train_losses.append(loss.item())
+            train_accuracies.append(correct.item() / float(opt.batchSize * 2500))
+
             if i % 10 == 0:
                 j, data = next(enumerate(testdataloader, 0))
                 points, target = data
@@ -118,6 +128,10 @@ def train_segmentation(
                 correct = pred_choice.eq(target.data).cpu().sum()
                 print('[%d: %d/%d] %s loss: %f accuracy: %f' % (
                     epoch, i, num_batch, blue('test'), loss.item(), correct.item() / float(opt.batchSize * 2500)))
+
+                # For test
+                test_losses.append(loss.item())
+                test_accuracies.append(correct.item() / float(opt.batchSize * 2500))
 
         torch.save(classifier.state_dict(), '%s/seg_model_%s_%d.pth' % (opt.outf, opt.class_choice, epoch))
 
@@ -148,3 +162,35 @@ def train_segmentation(
             shape_ious.append(np.mean(part_ious))
 
     print("mIOU for class {}: {}".format(opt.class_choice, np.mean(shape_ious)))
+
+    ##### VISUALIZE TRAINING CURVES ####
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+
+    # Plot train accuracy
+    axes[0, 0].plot(train_accuracies)
+    axes[0, 0].set_title('Train Accuracy')
+    axes[0, 0].set_xlabel('Iteration')
+    axes[0, 0].set_ylabel('Accuracy')
+
+    # Plot test accuracy
+    axes[0, 1].plot(test_accuracies)
+    axes[0, 1].set_title('Test Accuracy')
+    axes[0, 1].set_xlabel('Iteration')
+    axes[0, 1].set_ylabel('Accuracy')
+
+    # Plot train loss
+    axes[1, 0].plot(train_losses)
+    axes[1, 0].set_title('Train Loss')
+    axes[1, 0].set_xlabel('Iteration')
+    axes[1, 0].set_ylabel('Loss')
+
+    # Plot test loss
+    axes[1, 1].plot(test_losses)
+    axes[1, 1].set_title('Test Loss')
+    axes[1, 1].set_xlabel('Iteration')
+    axes[1, 1].set_ylabel('Loss')
+
+    # Show the plots
+    plt.tight_layout()
+    plt.show()
+
