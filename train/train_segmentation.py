@@ -29,9 +29,6 @@ def train_segmentation(
     batch_size = 32
     ############# END YOUR CODE ###############
 
-    optimizer = optim.Adam(classifier.parameters(), lr=lr, betas=(0.9, 0.999))
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.5)
-
     opt = Options(
         dataset=dataset,
         batchSize=batch_size,
@@ -42,6 +39,7 @@ def train_segmentation(
         class_choice=class_choice,
         feature_transform=feature_transform
     )
+
 
     opt.manualSeed = random.randint(1, 10000)  # fix seed
     print("Random Seed: ", opt.manualSeed)
@@ -82,9 +80,11 @@ def train_segmentation(
 
     classifier = PointNetDenseCls(k=num_classes, feature_transform=opt.feature_transform)
 
+    optimizer = optim.Adam(classifier.parameters(), lr=lr, betas=(0.9, 0.999))
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.5)
+
     if opt.model != '':
         classifier.load_state_dict(torch.load(opt.model))
-
 
     classifier.cuda()
 
