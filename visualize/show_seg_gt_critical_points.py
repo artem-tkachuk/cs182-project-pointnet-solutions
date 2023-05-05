@@ -66,7 +66,12 @@ def visualize_seg_and_critical_points(
         show_points(point_np, pred_color, title='Prediction')
 
     elif show == 'gt':
+        ############ YOUR CODE HERE #####################
+        #  Show ground truth visualization              #
+        #  visualizations                               #
+        #################################################
         show_points(point_np, gt, title='Ground Truth')
+        ############# END YOUR CODE #####################
 
     elif show == 'critical_points':
         curvatures = compute_principal_curvature(point_np)
