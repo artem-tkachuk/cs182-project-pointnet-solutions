@@ -3,12 +3,12 @@ import os
 import random
 import torch.optim as optim
 import torch.utils.data
-from dataset.ShapeNetDataset import ShapeNetDataset
-from pointnet.models import PointNetDenseCls, feature_transform_regularizer
 import torch.nn.functional as F
 from tqdm import tqdm
 import numpy as np
-from utils.options import Options
+from cs182_project_pointnet.utils.options import Options
+from cs182_project_pointnet.dataset.ShapeNetDataset import ShapeNetDataset
+from cs182_project_pointnet.pointnet.models import PointNetDenseCls, feature_transform_regularizer
 
 
 def train_segmentation(

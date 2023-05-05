@@ -1,7 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.neighbors import NearestNeighbors
-
-from visualize.show_points import show_points
+from cs182_project_pointnet.visualize.show_points import show_points
 
 
 def compute_principal_curvature(points, k=10):

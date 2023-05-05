@@ -56,7 +56,7 @@ class ShapeNetDataset(data.Dataset):
 
         self.classes = dict(zip(sorted(self.cat), range(len(self.cat))))
         # print(self.classes)
-        with open('/content/misc/num_seg_classes.txt', 'r') as f:
+        with open('/content/cs182_project_pointnet/misc/num_seg_classes.txt', 'r') as f:
             for line in f:
                 ls = line.strip().split()
                 self.seg_classes[ls[0]] = int(ls[1])

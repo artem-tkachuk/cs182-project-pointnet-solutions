@@ -1,3 +1,8 @@
+import os
+import numpy as np
+from tqdm import tqdm
+
+
 def get_segmentation_classes(root):
     catfile = os.path.join(root, 'synsetoffset2category.txt')
     cat = {}
@@ -17,7 +22,7 @@ def get_segmentation_classes(root):
             token = (os.path.splitext(os.path.basename(fn))[0])
             meta[item].append((os.path.join(dir_point, token + '.pts'), os.path.join(dir_seg, token + '.seg')))
 
-    with open('/content/misc/num_seg_classes.txt', 'a') as f:
+    with open('/content/cs182_project_pointnet/misc/num_seg_classes.txt', 'a') as f:
         for item in cat:
             datapath = []
             num_seg_classes = 0
