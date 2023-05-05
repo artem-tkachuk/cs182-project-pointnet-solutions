@@ -14,7 +14,6 @@ from cs182_project_pointnet.pointnet.models import PointNetDenseCls, feature_tra
 
 def train_segmentation(
         dataset,
-        batch_size=32,
         workers=4,
         nepoch=25,
         outf='seg',
@@ -22,6 +21,17 @@ def train_segmentation(
         class_choice='Chair',
         feature_transform=False
 ):
+    ############# YOUR CODE HERE ###############
+    #  Tune hyperparameters                    #
+    ############################################
+    lr = 0.001
+    step_size = 20
+    batch_size = 32
+    ############# END YOUR CODE ###############
+
+    optimizer = optim.Adam(classifier.parameters(), lr=lr, betas=(0.9, 0.999))
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.5)
+
     opt = Options(
         dataset=dataset,
         batchSize=batch_size,
@@ -32,8 +42,6 @@ def train_segmentation(
         class_choice=class_choice,
         feature_transform=feature_transform
     )
-
-    # print(opt)
 
     opt.manualSeed = random.randint(1, 10000)  # fix seed
     print("Random Seed: ", opt.manualSeed)
@@ -77,8 +85,7 @@ def train_segmentation(
     if opt.model != '':
         classifier.load_state_dict(torch.load(opt.model))
 
-    optimizer = optim.Adam(classifier.parameters(), lr=0.001, betas=(0.9, 0.999))
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
+
     classifier.cuda()
 
     num_batch = len(dataset) / opt.batchSize
@@ -110,9 +117,14 @@ def train_segmentation(
             print('[%d: %d/%d] train loss: %f accuracy: %f' % (
                 epoch, i, num_batch, loss.item(), correct.item() / float(opt.batchSize * 2500)))
 
-            # For train
+            ############# YOUR CODE HERE ####################
+            #  Store train loss and accuracy for downstream #
+            #  visualizations                               #
+            #  Hint: append to lists previously defined     #
+            #################################################
             train_losses.append(loss.item())
             train_accuracies.append(correct.item() / float(opt.batchSize * 2500))
+            ############# END YOUR CODE #####################
 
             if i % 10 == 0:
                 j, data = next(enumerate(testdataloader, 0))
@@ -185,10 +197,15 @@ def train_segmentation(
     axes[1, 0].set_ylabel('Loss')
 
     # Plot test loss
+    ############# YOUR CODE HERE ####################
+    #  Plot the test loss                           #
+    #  Hint: Look at the code above for inspiration #
+    #################################################
     axes[1, 1].plot(test_losses)
     axes[1, 1].set_title('Test Loss')
     axes[1, 1].set_xlabel('Iteration')
     axes[1, 1].set_ylabel('Loss')
+    ############# END YOUR CODE #####################
 
     # Show the plots
     plt.tight_layout()
