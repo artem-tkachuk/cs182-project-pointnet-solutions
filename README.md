@@ -1,52 +1,6 @@
 # PointNet.pytorch
 This repo is implementation for PointNet(https://arxiv.org/abs/1612.00593) in pytorch. The model is in `pointnet/models.py`.
 
-It is tested with pytorch-1.0.
-
-# Download data and running
-
-```
-git clone https://github.com/fxia22/pointnet.pytorch
-cd pointnet.pytorch
-pip install -e .
-```
-
-Download and build visualization tool
-```
-cd script
-bash build.sh #build C++ code for visualization
-bash download.sh #download dataset
-```
-
-Training 
-```
-cd utils
-python train_classification.py --dataset <dataset path> --nepoch=<number epochs> --dataset_type <modelnet40 | shapenet>
-python train_segmentation.py --dataset <dataset path> --nepoch=<number epochs> 
-```
-
-Use `--feature_transform` to use feature transform.
-
-# Performance
-
-## Classification performance
-
-On ModelNet40:
-
-|  | Overall Acc | 
-| :---: | :---: | 
-| Original implementation | 89.2 | 
-| this implementation(w/o feature transform) | 86.4 | 
-| this implementation(w/ feature transform) | 87.0 | 
-
-On [A subset of shapenet](http://web.stanford.edu/~ericyi/project_page/part_annotation/index.html)
-
-|  | Overall Acc | 
-| :---: | :---: | 
-| Original implementation | N/A | 
-| this implementation(w/o feature transform) | 98.1 | 
-| this implementation(w/ feature transform) | 97.7 | 
-
 ## Segmentation performance
 
 Segmentation on  [A subset of shapenet](http://web.stanford.edu/~ericyi/project_page/part_annotation/index.html).
